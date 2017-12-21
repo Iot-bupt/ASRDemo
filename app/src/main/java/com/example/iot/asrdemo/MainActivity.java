@@ -154,11 +154,12 @@ public class MainActivity extends AppCompatActivity implements EventListener{
                     Log.e("MainActivity", "best_result:"+best_result );
                     tv_result.setText(best_result);
                     String fenci = LtpCloud(best_result);
-                    Log.e("MainActivity", "分词结果 ："+fenci );
+//                    Log.e("MainActivity", "分词结果 ："+fenci );
                     textView.setText(fenci);
 
                     ControlDevice cd = new ControlDevice();
                     cd.match(fenci);
+                    cd.post();
 
                 } catch (JSONException e) {
                     e.printStackTrace();

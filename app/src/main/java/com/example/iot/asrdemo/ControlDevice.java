@@ -23,6 +23,7 @@ import java.util.Arrays;
  * Created by zy on 2017/12/14.
  */
 
+
 public class ControlDevice {
 
     private String text;
@@ -54,34 +55,36 @@ public class ControlDevice {
             }
         }
 
-            System.out.println("v[] = "+v);
-            System.out.println("n[] = "+n);
+//        System.out.println("v[] = "+v);
+//        System.out.println("n[] = "+n);
+        Log.e("ControlDevice", "动词数组："+v );
+        Log.e("ControlDevice", "名词数组："+n );
 
-            if(v.contains("打开")||v.contains("拉开")){
-                param = true;
-            }else if(v.contains("关闭")||v.contains("拉上")||v.contains("关上")){
-                param = false;
-            }else{
-                Log.e("ControlDevice", "the commands contain error!");
-            }
+        if(v.contains("打开")||v.contains("拉开")){
+            param = true;
+        }else if(v.contains("关闭")||v.contains("拉上")||v.contains("关上")){
+            param = false;
+        }else{
+            Log.e("ControlDevice", "the commands contain error!");
+        }
 
 
+        if(n.contains("灯")){
+            deviceId = 1138530;
+        }else if(n.contains("窗帘")){
+            deviceId = 919653;
+        }else if(n.contains("门")){
+            deviceId = 544418;
+        }else{
+            Log.e("ControlDecive", "the device is not exsit!");
+        }
 
-            if(n.contains("灯")){
-                deviceId = 1138530;
-            }else if(n.contains("窗帘")){
-                deviceId = 919653;
-            }else if(n.contains("门")){
-                deviceId = 544418;
-            }else{
-                Log.e("ControlDecive", "the device is not exsit!");
-            }
-
-            Log.e("ControlDevice", "deviceId:"+deviceId );
+        Log.e("ControlDevice", "deviceId:"+deviceId );
+        Log.e("ControlDevice", "params:"+param );
 
     }
 
-    public String ControlDevice(){
+    public String post(){
 
        // int deviceId,boolean param
 
@@ -107,15 +110,17 @@ public class ControlDevice {
             out = new PrintWriter(conn.getOutputStream());
 
             // 发送请求参数
-//            JSONObject js = new JSONObject();
-//            js.put("method","setValue_1138530");
-//            js.put("params",true);
-//            js.put("timeout",500);
+            JSONObject json = new JSONObject();
+            json.put("method","setValue_"+deviceId);
+            json.put("params",param);
+            json.put("timeout",1000);
 
-            String jsons = "{\"method\":\"setValue_deviceId\"," +
-                    "\"params\":param," +
-                    "\"timeout\":500}";
-            out.print(jsons);
+            Log.e("ControlDevice", "请求的json是：" + json);
+
+//            String jsons = "{\"method\":\"setValue_deviceId\"," +
+//                    "\"params\":param," +
+//                    "\"timeout\":500}";
+            out.print(json);
             // flush输出流的缓冲
             out.flush();
             // 定义BufferedReader输入流来读取URL的响应
@@ -146,13 +151,4 @@ public class ControlDevice {
         return result;
 
     }
-
-//    public static void main(String[] args) {
-//
-//        String testStr = "打开_v 窗帘_n";
-//        ControlDevice cd = new ControlDevice();
-//        cd.match(testStr);
-//
-//    }
-
 }
